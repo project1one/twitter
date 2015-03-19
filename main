@@ -1,0 +1,68 @@
+
+import opener
+import Threads
+import pause
+import find
+import graph
+import pickle
+import login
+
+user = raw_input ("enter user name (leave empty to login as sample twitt!) : ")
+password = raw_input ("enter password (leave empty to login as sample twitt password!) : ")
+
+
+print "_________________________"
+print ""
+print ""
+print ""
+print ""
+print ""
+print "         pls w8!       "
+print ""
+print ""
+print ""
+print ""
+print ""
+print ""
+print "_________________________"
+print ""
+print ""
+print ""
+print ""
+print ""
+print ""
+
+if user != "" and password != "":
+	token = login.get_token (user, password)
+else:
+	token = "auth_token=bf715cb46a5d946e1872dfeebc9d734dd72ef82a"
+
+FirstData = opener.open_url_as (token, "https://twitter.com/following")
+miningTrds = Threads.threads ()
+miningTrds.init ()
+miningTrds.check_list = find.find_football (FirstData)
+miningTrds.user_cookie = "auth_token=bf715cb46a5d946e1872dfeebc9d734dd72ef82a"
+
+for i in find.find_football (FirstData):
+	miningTrds.graph.append ( ("YOU!", i) )
+
+pause_state = pause.state()
+pause_state.init()
+pause_state.start_check()
+
+while True:
+	if not pause_state.is_paused:
+		miningTrds.paused_flag = False
+		miningTrds.run_all()
+
+	else:
+		miningTrds.paused_flag = True
+		miningTrds.join_all()
+		
+		with open('graphData.pickle', 'rb') as f:
+			graph_list = pickle.load (f)
+		
+		graph.draw_graph (graph_list)
+		while pause_state.is_paused:
+			pass
+
