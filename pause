@@ -1,0 +1,33 @@
+
+
+import threading
+import sys
+import graph
+ 
+class state():
+	
+	def init(self):
+		self.is_paused = False
+		self.tred = threading.Thread(None, self.check)
+	
+	def check(self):
+		flag = -1
+		while True:
+			x= raw_input ("")
+			
+			if str(x) == "p":
+				flag = flag * -1
+				if flag == 1:
+					self.is_paused = True
+				if flag == -1:
+					self.is_paused = False
+				print ("________________")
+				print ("state is : ", " paused ? -->  " , self.is_paused)
+				
+	def start_check(self):
+		self.tred.start ()
+
+
+
+
+    
