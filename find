@@ -1,0 +1,16 @@
+
+
+import re
+from bs4 import BeautifulSoup
+
+def find_football (opened_url_as_string):
+	final_list = []
+	html_tree = BeautifulSoup(opened_url_as_string)
+	List = html_tree.find_all ('div', class_="ProfileCard js-actionable-user")
+	for i in List:
+		how_many_football_found = re.findall ('[f,F]ootball?' , i.get_text())
+
+		if len (how_many_football_found) > 0:
+			lisst = re.findall ('data-screen-name=".+?"' , str(i))
+			final_list.append (lisst[0][18:-1])
+	return final_list
