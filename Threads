@@ -1,0 +1,72 @@
+
+
+import threading
+import opener
+import find
+import copy
+import pickle
+import graph
+
+
+class threads ():
+	
+	def init(self):
+		self.new_elements_of_check_list = []
+		self.paused_flag       = False
+		self.max_num_of_trds   = 8
+		self.curnt_num_of_trds = 0
+		self.busy_trds         = []
+		self.check_list        = []
+		self.checked_before    = []
+		self.graph             = []
+		self.user_cookie       = ""
+		self.trd_lock = threading.Lock ()
+	
+	def run_all (self):
+		if not self.paused_flag:
+			if self.curnt_num_of_trds < self.max_num_of_trds:
+				if len(self.check_list) > 0 :
+					url = "https://twitter.com/" + self.check_list [0] + "/following"
+					self.checked_before.append (self.check_list [0])
+					t = threading.Thread (target = self.make_graph, args = (url, ))
+					self.busy_trds.append (t)
+					self.busy_trds[-1].start()
+					self.curnt_num_of_trds = self.curnt_num_of_trds + 1
+					self.check_list.pop (0)
+			else:
+				pop_list = []
+				for i in range (len(self.busy_trds)):
+					if not self.busy_trds[i].is_alive():
+						self.curnt_num_of_trds = self.curnt_num_of_trds - 1
+						pop_list.append (i)
+				for i in reversed(pop_list):
+					self.busy_trds.pop (i)
+	
+	def make_graph (self,url):
+		data = opener.open_url_as (self.user_cookie, url)
+		new_elements_of_check_list = find.find_football (data)
+		self.trd_lock.acquire()
+		for element in new_elements_of_check_list:
+			if element not in self.checked_before:
+				self.check_list.append (element)
+				if (url[20:-10], element) not in self.graph and (element, url[20:-10]) not in self.graph:
+					self.graph.append ((url[20:-10], element)) 
+					if not self.paused_flag:
+						print "there are currntly " , len (graph.list_of_verticls (self.graph)), "verticls in graph!"
+						print "enter p to pause and show graph!" 
+					else:
+						print ""
+						print "pls wait!"
+		self.trd_lock.release ()
+	
+	def join_all (self):
+		print ""
+		print "plz wait!"
+		print ""
+		for trd in self.busy_trds:
+			trd.join()	
+		with open('graphData.pickle', 'wb') as f:
+			pickle.dump (self.graph, f)
+		print ""
+		print "Done! close the image and enter p again to start! "
+		print ""
