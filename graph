@@ -1,0 +1,58 @@
+
+from igraph import *
+
+
+def list_of_verticls (graph_list):
+	List_of_verticls = [] 
+	for edge in graph_list:
+		if edge[0] not in List_of_verticls:
+			List_of_verticls.append (edge[0])
+		if edge[1] not in List_of_verticls:
+			List_of_verticls.append (edge[1])
+	return List_of_verticls
+	
+	
+
+
+def graph_list2dic (graph_list):
+
+	G   = {}
+	mvi = {}
+	verticls = list_of_verticls (graph_list)
+	i = 0
+	for verticl in verticls:
+		i = i + 1
+		List = []
+		for edge in graph_list:
+			if edge[0] == verticl:
+				List.append (edge[1])
+		G [verticl] = List
+		mvi [verticl] = i - 1
+	return [G, mvi]
+
+
+
+def draw_graph(graph_list):
+	
+	List = graph_list2dic (graph_list)
+	G = List [0]
+	mvi = List [1]
+	vertices = list_of_verticls (graph_list)
+	
+	edges= [(mvi[v], mvi[a]) for v in G.keys() for a in G[v]]
+	graph= Graph(edges=edges, directed=True)
+	graph.vs["label"] = vertices
+	index = vertices.index ("YOU!")
+	colors = []
+	for i in range (0, index):
+		colors.append ("pink")
+	colors.append ("yellow")
+	for i in range (index + 1, len (vertices)):
+		colors.append ("pink")
+		
+	graph.vs["color"] = colors
+	plot(graph, bbox=(1000, 1000), margin=100)
+    
+    
+#draw_graph ([('YOU!', 'adidasFballUS'), ('YOU!', 'FootbaIl_Tweets'), ('YOU!', 'FA'), ('YOU!', 'CFB'), ('YOU!', 'JustFutball'), ('YOU!', 'Now__Football'), ('YOU!', 'FootbalIStuff'), ('YOU!', 'MCFC'), ('YOU!', 'FFA'), ('YOU!', 'Foot_ballClips'), ('YOU!', 'Rotoworld_FB'), ('YOU!', 'nflnetwork'), ('Now__Football', 'Sports__Punt'), ('Now__Football', 'GazpromFootball'), ('Now__Football', 'LUFC'), ('Now__Football', 'YakatakFootball'), ('Now__Football', 'pumafootball'), ('adidasFballUS', 'ULFBRecruiting'), ('CFB', 'Ashhash5'), ('CFB', 'BringThePlayoff'), ('MCFC', '67Kelechi'), ('MCFC', 'thaGooch_'), ('MCFC', 'kjetilhaug77'), ('FootbalIStuff', 'sam_horne'), ('FootbalIStuff', 'Dotterel4'), ('FootbaIl_Tweets', 'Toohardquis'), ('FootbaIl_Tweets', 'Cougzzz98'), ('FootbaIl_Tweets', 'knippy79'), ('FA', 'Ibs_Diallo'), ('FA', 'APH_Inspired'), ('FA', 'Matts90'), ('FA', 'CPEngland2015'), ('FA', 'JamesPBlackwell'), ('FA', 'OneTwoZine'), ('FA', 'JHenderson'), ('FA', 'GlennMoore7'), ('FA', 'NonLeagueDirect'), ('FFA', 'Brown9Paul'), ('FFA', 'nijaco'), ('FFA', 'RMarchioli'), ('FFA', 'MarianaRudan'), ('FFA', 'SantoSamEd'), ('Rotoworld_FB', 'JessePantuosco'), ('Rotoworld_FB', 'GrahamBarfield'), ('Rotoworld_FB', 'Andy_Benoit'), ('Rotoworld_FB', 'Sky_Razzball'), ('nflnetwork', 'TJLang70'), ('LUFC', 'LiamBennett17'), ('LUFC', 'Atkinson98'), ('LUFC', 'adam_berry8'), ('LUFC', 'MarcoSilver1991'), ('LUFC', 'adryantavares'), ('Foot_ballClips', 'Crowley190'), ('GazpromFootball', 'PetrCech'), ('GazpromFootball', 'Football4F'), ('YakatakFootball', 'Will_Haine'), ('YakatakFootball', '3gerardpique'), ('YakatakFootball', 'Chelsea_HQ'), ('YakatakFootball', 'chazaustin9'), ('YakatakFootball', 'messi10stats'), ('Sports__Punt', 'Jackharper7'), ('pumafootball', 'JakeHesketh'), ('pumafootball', 'gunnerblog'), ('67Kelechi', 'JillScott12'), ('67Kelechi', 'mcfcsnappershaz'), ('67Kelechi', 'MCWFC'), ('67Kelechi', 'TosinAdarabioyo'), ('67Kelechi', 'Ianlawlor'), ('67Kelechi', 'EiJo92'), ('ULFBRecruiting', 'CoryCoxArt'), ('ULFBRecruiting', 'UlmerWill'), ('ULFBRecruiting', '_NickBurch'), ('ULFBRecruiting', 'BigPooh_91'), ('ULFBRecruiting', 'da_arnette'), ('BringThePlayoff', 'cfbhall'), ('BringThePlayoff', 'CFBPlayoff'), ('BringThePlayoff', 'DrewRoberts'), ('BringThePlayoff', 'SDSNation'), ('BringThePlayoff', 'SECfootball'), ('BringThePlayoff', 'SDS'), ('Ashhash5', 'rollbamaroll'), ('thaGooch_', 'Lis2808'), ('thaGooch_', 'Trequartistics'), ('thaGooch_', 'SheikhZammo'), ('thaGooch_', 'UberFactsFooty'), ('thaGooch_', 'Troll__Football'), ('kjetilhaug77', 'MichaelCrowe95'), ('kjetilhaug77', 'SinanBytyqi72'), ('kjetilhaug77', 'samuelseen'), ('kjetilhaug77', 'marcuswood8'), ('knippy79', 'usnikefootball'), ('knippy79', 'FootbalITweets'), ('CPEngland2015', 'nachodoug'), ('CPEngland2015', 'jackrutter2'), ('CPEngland2015', 'JamieRfootball'), ('CPEngland2015', 'laurenasquith'), ('CPEngland2015', 'MattElkington'), ('CPEngland2015', 'RyanKay1996'), ('CPEngland2015', 'Jraynes32'), ('CPEngland2015', 'lynchie09'), ('Toohardquis', 'Boss_Mo94'), ('Ibs_Diallo', 'BathCity_FC'), ('Ibs_Diallo', 'FootyLiveVines'), ('APH_Inspired', 'england'), ('Matts90', 'TauheedFc'), ('Matts90', 'wembleystadium'), ('Matts90', 'mattymorgan69'), ('JamesPBlackwell', 'Foootballaholic'), ('JamesPBlackwell', 'Europes_Elite'), ('JamesPBlackwell', 'TipsBible'), ('JamesPBlackwell', 'BenFoster'), ('OneTwoZine', 'GonzalesSefton'), ('OneTwoZine', 'CramUtdLadies'), ('OneTwoZine', 'YourFootball05'), ('OneTwoZine', 'Footieinthecity'), ('GlennMoore7', 'theowalcott'), ('GlennMoore7', 'WomeninFootball'), ('GlennMoore7', 'TheJonnyDavies'), ('GlennMoore7', 'osobleahmed'), ('GlennMoore7', 'WWFShow'), ('JHenderson', 'sheyi_ojo'), ('JHenderson', 'RyanMcL2'), ('JHenderson', 'bradsmith_94'), ('JHenderson', 'england'), ('Brown9Paul', 'PabloFootball'), ('Brown9Paul', 'footyfragmento'), ('Brown9Paul', 'LSwin07'), ('Brown9Paul', 'AboutFootballl'), ('NonLeagueDirect', 'conferencefooty'), ('NonLeagueDirect', 'bishopafc'), ('NonLeagueDirect', 'SilsdenFC'), ('NonLeagueDirect', 'Wakefieldfc'), ('NonLeagueDirect', 'Nmfctweet'), ('NonLeagueDirect','THERAILFC'), ('NonLeagueDirect', 'radcliffeboro'), ('NonLeagueDirect', 'BrislingtonFC'), ('NonLeagueDirect', 'OssettTownAFC'), ('NonLeagueDirect', 'ACFC1916'), ('nijaco', 'adrian_zahra'), ('nijaco', 'antejuric1'), ('MarianaRudan', 'LizDeepJones'), ('MarianaRudan', 'fbcollectivecom'), ('RMarchioli', 'Zone_14'), ('RMarchioli', 'caribbeanftbl'), ('RMarchioli', 'aclregister'), ('SantoSamEd', 'BesartBerisha7'), ('SantoSamEd', 'Futboltec'), ('SantoSamEd', 'AzizBehich'), ('SantoSamEd', 'BenWilsonFFA'), ('Andy_Benoit', 'iStaycer'), ('Andy_Benoit', 'AngieSix'), ('Andy_Benoit', 'rotoworld'), ('Andy_Benoit', 'StarvingScout'), ('Andy_Benoit', 'RCummingsTBO'), ('Andy_Benoit', 'evansilva'), ('Sky_Razzball', 'Burgandy_DFW'), ('Sky_Razzball', 'NicholasMinnix'), ('Sky_Razzball', 'Brad_Pinkerton'), ('GrahamBarfield', 'TJHernandez'), ('GrahamBarfield', 'JMcCormickESPN'), ('GrahamBarfield', 'SchaufDS'), ('GrahamBarfield', 'MattWaldman'), ('GrahamBarfield', 'KarlSafchick'), ('GrahamBarfield', 'SharpFootball'), ('GrahamBarfield', 'PFF'), ('GrahamBarfield', 'greggrosenthal'), ('GrahamBarfield', 'PFF_Fantasy'), ('GrahamBarfield', 'SteveWyremski'), ('JessePantuosco', 'YahooNoise'), ('JessePantuosco', 'RMSummerlin'), ('JessePantuosco', 'rotoworld'), ('JessePantuosco', 'davebirkett'), ('Atkinson98', 'MirrorRowZed'), ('Atkinson98', 'DiscoMirror'), ('Atkinson98', 'T_Hawkinss'), ('Atkinson98', 'VineFootballUS'), ('TJLang70', 'CoachIzzy1'), ('LiamBennett17', 'FootyAccums'), ('LiamBennett17', '_richardmurray'), ('LiamBennett17', 'AlexCairns30'), ('LiamBennett17', 'seangoodwin15'), ('adam_berry8', 'MSterjovski'), ('adam_berry8', 'A_wollerton10'), ('adam_berry8', 'charlietaylor09'), ('adam_berry8', 'OSAussies'), ('adam_berry8', 'RichBaylissFOX'), ('MarcoSilver1991', 'AlexCairns30'), ('MarcoSilver1991', 'EmaGiulianelli'), ('MarcoSilver1991', 'FIFAcom'), ('adryantavares', 'StephenWarnock3'), ('adryantavares', 'charlietaylor09'), ('adryantavares', 'lewiscook_'), ('adryantavares', 'sambyram93'), ('PetrCech', 'TheoGS23'), ('PetrCech', 'vydra_92'), ('Football4F', 'TheRealAC3'), ('Football4F', 'UEFAcom'), ('Crowley190', 'cobbo26'), ('Crowley190', 'eoindoyle88'), ('Crowley190', 'LilMissNYJet'), ('Will_Haine', 'jamesmcnicholas'), ('Will_Haine', '90min_Football'), ('Will_Haine', 'jasonpettigrove'), ('Will_Haine', 'fitbathatba'), ('Will_Haine', 'DFletcherSport'), ('Will_Haine', 'th14Renato'), ('Will_Haine', 'MattHughesTimes')])
+
